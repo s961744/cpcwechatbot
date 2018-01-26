@@ -10,11 +10,9 @@ const
  * @param {JSON} config 微信配置文件 
  * @param {Request} req  Request 对象
  */
-var CryptoGraphy = function(config,req){
+var CryptoGraphy = function(req){
     //设置加解密算法
     this.aesModel = 'aes-256-cbc';
-    //设置 CryptoGraphy 对象属性 appID
-    this.appID = config.appID;
     //设置 CryptoGraphy 对象属性 encodingAESKey
     this.encodingAESKey = new Buffer(process.env.encodingAESKey + '=', 'base64');
     //设置 CryptoGraphy 对象属性 iv
@@ -33,8 +31,6 @@ var CryptoGraphy = function(config,req){
     this.agentSecret1000002 = process.env.agentSecret1000002;
     //通訊錄Secret
     this.directorySecret = process.env.directorySecret;
-    //ApiUrl
-    this.ApiURL = config.ApiURL;
     //管理員UserId
     this.adminId = process.env.adminId;
 }

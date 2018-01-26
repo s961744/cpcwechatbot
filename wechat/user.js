@@ -37,7 +37,6 @@ exports.getUser = function (accessToken, userid) {
  * @param {JSON} userInfo
  */
 exports.createUser = function (accessToken, userInfo) {
-    var that = this;
     return new Promise(function (resolve, reject) {
         var url = util.format(process.env.API_createUser, accessToken);
         //console.log("url=" + url);
@@ -61,7 +60,6 @@ exports.createUser = function (accessToken, userInfo) {
  * @param {JSON} userInfo
  */
 exports.updateUserStatus = function (userInfo) {
-    var that = this;
     return new Promise(function (resolve, reject) {
         var url = util.format(process.env.API_createUser, accessToken);
         //console.log("url=" + url);

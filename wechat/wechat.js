@@ -3,8 +3,7 @@
 const
     crypto = require('crypto'), // 加密模組
     WXBizMsgCrypt = require('wechat-crypto'), // 微信Token解密
-    https = require('https'), // htts模組
-    http = require('http'), // http模組
+    http = require('./../http'),
     util = require('util'), // util 工具模組
     fs = require('fs'), // file system
     parseString = require('xml2js').parseString, // xml轉js模組
@@ -18,10 +17,8 @@ const
 
 /**
  * 构建 WeChat 对象 即 js中 函数就是对象
- * @param {JSON} config 微信配置文件 
  */
-var WeChat = function(config){
-    this.config = config;
+var WeChat = function(){
     //token
     this.token = process.env.token;
     //corpId
@@ -30,96 +27,8 @@ var WeChat = function(config){
     this.agentSecret1000002 = process.env.agentSecret1000002;
     //通訊錄Secret
     this.directorySecret = process.env.directorySecret;
-    //ApiUrl
-    this.ApiURL = config.ApiURL;
     //管理員UserId
     this.adminId = process.env.adminId;
-
-    /**
-     * 處理https GET
-     * @param {String} url
-     */
-    this.requestGet = function(url){
-        return new Promise(function (resolve, reject) {
-            https.get(url, function (res) {
-                var chunks = [], result = "", size = 0;
-                res.on('data', function (chunk) {
-                    chunks.push(chunk);
-                    size += chunk.length;
-                });
-                res.on('end', function () {
-                    var data = null;
-                    switch (chunks.length) {
-                        case 0: data = new Buffer(0);
-                            break;
-                        case 1: data = chunks[0];
-                            break;
-                        default:
-                            data = new Buffer(size);
-                            for (var i = 0, pos = 0, l = chunks.length; i < l; i++) {
-                                var chunk = chunks[i];
-                                chunk.copy(data, pos);
-                                pos += chunk.length;
-                            }
-                            break;
-                    }
-                    if (data === '[]') {
-                        console.log("Empty result.");
-                    }
-                    else {
-                        resolve(data);
-                    }
-                });
-            }).on('error', function (err) {
-                reject(err);
-            });
-        });
-    }
-
-    
-
-    /**
-     * 消息發送
-     * @param {JSON} post_data 
-     */
-    this.postMsg = function (access_token, post_data){
-        return new Promise(function (resolve, reject) {
-            // post options
-            var paraPost = '?access_token=' + access_token;
-            var post_options = {
-                host: 'qyapi.weixin.qq.com',
-                port: '443',
-                path: '/cgi-bin/message/send' + paraPost,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Content-Length': (new Buffer(post_data)).length
-                }
-            };
-
-            // Set up the request
-            var post_req = https.request(post_options, function (res) {
-                var buffer = [], result = '';
-                res.charset = 'utf-8';
-                res.on('data', function (data) {
-                    buffer.push(data);
-                });
-                res.on('end', function () {
-                    result = Buffer.concat(buffer).toString('utf-8');
-                    resolve(result);
-                })
-            })
-            //监听错误事件
-            .on('error', function (err) {
-                console.log(err);
-                reject(err);
-            });
-
-            // post the data
-            post_req.write(post_data);
-            post_req.end();
-        });
-    }
 }
 
 /**
@@ -144,20 +53,18 @@ WeChat.prototype.auth = function(req,res){
  * @param {String} secret secret
  */
 WeChat.prototype.getAccessToken = function (secretType,secret){
-    var that = this;
     return new Promise(function(resolve,reject){
         // 目前時間
         var currentTime = new Date().getTime();
         // 格式化URL
-        //console.log("accessTokenApi=" + that.config.ApiURL.accessTokenApi);
-        var url = util.format(that.config.ApiURL.accessTokenApi, process.env.corpId, secret);
+        var url = util.format(process.env.API_getAccessToken, process.env.corpId, secret);
         // 判斷accessToken是否還有效
         // 已過期時重取
         //console.log("url=" + url + ",secretType=" + secretType);
         switch (secretType) {
             case 'directory':
                 if (accessTokenJson.directory.access_token === "" || accessTokenJson.directory.expires_time < currentTime) {
-                    that.requestGet(url).then(function (data) {
+                    http.requestGet(url).then(function (data) {
                         var result = JSON.parse(data);
                         if (result.errcode == "0") {
                             accessTokenJson.directory.access_token = result.access_token;
@@ -212,8 +119,8 @@ WeChat.prototype.getAccessToken = function (secretType,secret){
  * @param {Response} res Response
  */
 WeChat.prototype.handleMsg = function (req, res) {
-    var buffer = [], that = this;
-    var cryptoGraphy = new CryptoGraphy(that.config, req);
+    var buffer = [];
+    var cryptoGraphy = new CryptoGraphy(req);
 
     //接收資料
     req.on('data', function (data) {

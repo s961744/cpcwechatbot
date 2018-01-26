@@ -6,6 +6,47 @@ const
     https = require('https');
 
 /**
+* 處理http GET
+* @param {String} url
+*/
+exports.requestHttpGet = function (url) {
+    return new Promise(function (resolve, reject) {
+        http.get(url, function (res) {
+            var chunks = [], result = "", size = 0;
+            res.on('data', function (chunk) {
+                chunks.push(chunk);
+                size += chunk.length;
+            });
+            res.on('end', function () {
+                var data = null;
+                switch (chunks.length) {
+                    case 0: data = new Buffer(0);
+                        break;
+                    case 1: data = chunks[0];
+                        break;
+                    default:
+                        data = new Buffer(size);
+                        for (var i = 0, pos = 0, l = chunks.length; i < l; i++) {
+                            var chunk = chunks[i];
+                            chunk.copy(data, pos);
+                            pos += chunk.length;
+                        }
+                        break;
+                }
+                if (data === '[]') {
+                    console.log("Empty result.");
+                }
+                else {
+                    resolve(data);
+                }
+            });
+        }).on('error', function (err) {
+            reject(err);
+        });
+    });
+}
+
+/**
 * 處理http POST
 * @param {String} url
 */
@@ -61,6 +102,8 @@ exports.requestHttpPut = function (url, data) {
             hostname: urlData.hostname,
             //目标地址 
             path: urlData.path,
+            //目标PORT 
+            port: urlData.port,
             //请求方法
             method: 'PUT',
             //头部协议
