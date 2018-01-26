@@ -1,0 +1,18 @@
+{
+  "name": "cpcwechatbot",
+  "version": "0.0.0",
+  "description": "WeChat",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "author": {
+    "name": "A0012272"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "node-schedule": "^1.3.0",
+    "wechat-crypto": "0.0.2",
+    "xml2js": "^0.4.19"
+  }
+}

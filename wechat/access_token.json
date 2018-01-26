@@ -1,0 +1,14 @@
+{
+  "agent1000002": {
+    "access_token": "",
+    "expires_time": 0
+  },
+  "directory": {
+    "access_token": "",
+    "expires_time": 0
+  },
+  "recieveMsg": {
+    "access_token": "",
+    "expires_time": 0
+  }
+}
