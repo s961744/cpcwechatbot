@@ -1,6 +1,6 @@
 'use strict' // 嚴謹模式
 
-http = require('./../http'),
+const http = require('./../http'),
 
 /**
  * 回復文字訊息
