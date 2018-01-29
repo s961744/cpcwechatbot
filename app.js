@@ -104,10 +104,18 @@ var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function ()
                 {
                     var user_id = row.user_id;
                     var user_info = row.user_info;
-                    try {
+                    try
+                    {
                         token.getAccessToken("directory", process.env.directorySecret).then(function (data)
                         {
-                            user.createUser(data, user_info);
+                            user.createUser(data, user_info).then(function (data)
+                            {
+                                var userAuth = JSON.parse(JSON.stringify('{"user_id": "' + user_id + '", "status": "ES"}'));
+                                user.updateUserStatus(userAuth).then(function (data)
+                                {
+                                    console.log("Create user success:" + user_id);
+                                });
+                            });
                         });
                     }
                     catch (e) {
