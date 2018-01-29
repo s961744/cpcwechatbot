@@ -59,11 +59,11 @@ exports.createUser = function (accessToken, userInfo) {
  * 更新成員狀態
  * @param {JSON} userInfo
  */
-exports.updateUserStatus = function (userInfo) {
+exports.updateUserStatus = function (userAuth) {
     return new Promise(function (resolve, reject) {
-        var url = util.format(process.env.API_createUser, accessToken);
+        var url = process.env.API_weChatRestful + "/putUserAuth";
         //console.log("url=" + url);
-        http.requestHttpPut(url, userInfo).then(function (data) {
+        http.requestHttpPut(url, userAuth).then(function (data) {
             //console.log("requestGetdata=" + data);
             var result = JSON.parse(data);
             //
