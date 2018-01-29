@@ -41,7 +41,7 @@ WeChat.prototype.auth = function(req,res){
     var timestamp = req.query.timestamp;
     var nonce = req.query.nonce;
     var echostr = req.query.echostr;
-    var cryptor = new WXBizMsgCrypt(process.env.token, process.env.directoryEncodingAESKey, process.env.corpId)
+    var cryptor = new WXBizMsgCrypt(process.env.token, process.env.encodingAESKey, process.env.corpId)
     var s = cryptor.decrypt(echostr);
     res.send(s.message);
     console.log("s.message=" + s.message);
