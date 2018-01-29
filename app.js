@@ -49,9 +49,9 @@ var job = schedule.scheduleJob('5,35 * * * * *', function ()
                     var message = row.message;
                     try
                     {
-                        var msg_data = JSON.parse(JSON.stringify('{"touser": "' + user_id + '", "msgtype": "text", "agentid": 1000002,"text" : {"content" : "' + message + '"},"safe": 0}'));
+                        var msg_data = JSON.parse(JSON.stringify('{"touser": "' + user_id + '", "msgtype": "text", "agentid": ' + process.env.agentId + ', "text" : { "content": "' + message + '" }, "safe": 0}'));
                         console.log("msg_data=" + JSON.stringify(msg_data));
-                        token.getAccessToken("agent1000002", process.env.agentSecret1000002).then(function (data)
+                        token.getAccessToken("agent", process.env.agentSecret).then(function (data)
                         {
                             msg.postMsg(data, msg_data).then(function (result)
                             {
