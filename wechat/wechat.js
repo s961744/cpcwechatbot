@@ -23,8 +23,8 @@ var WeChat = function(){
     this.token = process.env.token;
     //corpId
     this.corpId = process.env.corpId;
-    //應用Serret(1000002)
-    this.agentSecret1000002 = process.env.agentSecret1000002;
+    //應用Serret
+    this.agentSecret = process.env.agentSecret;
     //通訊錄Secret
     this.directorySecret = process.env.directorySecret;
     //管理員UserId
@@ -84,18 +84,18 @@ WeChat.prototype.getAccessToken = function (secretType,secret){
                     resolve(accessTokenJson.directory.access_token);
                 }
                 break;
-            case 'agent1000002':
-                if (accessTokenJson.agent1000002.access_token === "" || accessTokenJson.agent1000002.expires_time < currentTime) {
+            case 'agent':
+                if (accessTokenJson.agent.access_token === "" || accessTokenJson.agent.expires_time < currentTime) {
                     that.requestGet(url).then(function (data) {
                         var result = JSON.parse(data);
                         if (result.errcode == "0") {
-                            accessTokenJson.agent1000002.access_token = result.access_token;
-                            accessTokenJson.agent1000002.expires_time = new Date().getTime() + (parseInt(result.expires_in) - 200) * 1000;
+                            accessTokenJson.agent.access_token = result.access_token;
+                            accessTokenJson.agent.expires_time = new Date().getTime() + (parseInt(result.expires_in) - 200) * 1000;
                             // 更新 accessToken.json
                             fs.writeFile('./wechat/access_token.json', JSON.stringify(accessTokenJson));
-                            console.log("update " + secretType + " accessToken:" + JSON.stringify(accessTokenJson.agent1000002));
+                            console.log("update " + secretType + " accessToken:" + JSON.stringify(accessTokenJson.agent));
                             // return access_token 
-                            resolve(accessTokenJson.agent1000002.access_token);
+                            resolve(accessTokenJson.agent.access_token);
                         } else {
                             // return error msg
                             resolve(result);
@@ -103,7 +103,7 @@ WeChat.prototype.getAccessToken = function (secretType,secret){
                     });
                 //尚未過期，直接返回    
                 } else {
-                    resolve(accessTokenJson.agent1000002.access_token);
+                    resolve(accessTokenJson.agent.access_token);
                 }
                 break;
             default:
@@ -166,7 +166,7 @@ WeChat.prototype.handleMsg = function (req, res) {
                             //回復訊息加密
                             reportMsg = cryptoGraphy.encryptMsg(reportMsg);
                             //返回给微信伺服器
-                            res.send(reportMsg);
+                            //res.send(reportMsg);
                             break;
                         
                     }
