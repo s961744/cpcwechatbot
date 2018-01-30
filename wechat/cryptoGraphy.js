@@ -27,8 +27,8 @@ var CryptoGraphy = function(req){
     this.token = process.env.token;
     //corpId
     this.corpId = process.env.corpId;
-    //應用Serret(1000002)
-    this.agentSecret1000002 = process.env.agentSecret1000002;
+    //應用Serret
+    this.agentSecret = process.env.agentSecret;
     //通訊錄Secret
     this.directorySecret = process.env.directorySecret;
     //管理員UserId

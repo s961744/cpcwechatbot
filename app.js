@@ -104,6 +104,7 @@ var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function ()
                 {
                     var user_id = row.user_id;
                     var user_info = row.user_info;
+                    console.log('Creating user ' + user_id);
                     try
                     {
                         token.getAccessToken("directory", process.env.directorySecret).then(function (data)

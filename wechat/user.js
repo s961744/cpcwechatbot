@@ -39,7 +39,7 @@ exports.getUser = function (accessToken, userid) {
 exports.createUser = function (accessToken, userInfo) {
     return new Promise(function (resolve, reject) {
         var url = util.format(process.env.API_createUser, accessToken);
-        //console.log("url=" + url);
+        console.log("CreateUser url=" + url);
         http.requestHttpsPost(url, userInfo).then(function (data) {
             //console.log("requestGetdata=" + data);
             var result = JSON.parse(data);
