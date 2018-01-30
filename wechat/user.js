@@ -16,7 +16,6 @@ exports.getUser = function (accessToken, userid) {
         http.requestHttpsGet(url).then(function (data) {
             //console.log("requestGetdata=" + data);
             result = JSON.parse(data);
-            //
             if (result.errcode == "0") {
                 console.log(JSON.stringify(result));
                 resolve(result.name);
@@ -56,11 +55,11 @@ exports.createUser = function (accessToken, userInfo) {
 
 /**
  * 更新成員狀態
- * @param {JSON} userInfo
+ * @param {JSON} userAuth
  */
 exports.updateUserStatus = function (userAuth) {
     return new Promise(function (resolve, reject) {
-        var url = process.env.API_weChatRestful + "/putUserAuth";
+        var url = process.env.API_weChatRestful + "/WechatUserAuth";
         //console.log("url=" + url);
         http.requestHttpPut(url, userAuth).then(function (result)
         {
