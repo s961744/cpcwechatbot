@@ -105,12 +105,7 @@ exports.requestHttpPut = function (url, data) {
             //目标PORT 
             port: urlData.port,
             //请求方法
-            method: 'PUT',
-            //头部协议
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': Buffer.byteLength(data, 'utf-8')
-            }
+            method: 'PUT'
         };
         var req = http.request(options, function (res) {
             var buffer = [], result = '';
