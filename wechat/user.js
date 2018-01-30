@@ -63,17 +63,10 @@ exports.updateUserStatus = function (userAuth) {
     return new Promise(function (resolve, reject) {
         var url = process.env.API_weChatRestful + "/putUserAuth";
         //console.log("url=" + url);
-        http.requestHttpPut(url, userAuth).then(function (data) {
-            //console.log("requestGetdata=" + data);
-            var result = JSON.parse(data);
-            //
-            if (result.errcode == "0") {
-                console.log(JSON.stringify(result));
-            } else {
-                // return error msg
-                console.log("Create user error, errcode=" + result.errcode);
-                resolve(result);
-            }
+        http.requestHttpPut(url, userAuth).then(function (data)
+        {
+            console.log("Update wechat_user_auth status result=" + result);
+            resolve(result);
         });
     });
 }
