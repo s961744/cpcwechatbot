@@ -39,13 +39,12 @@ exports.getUser = function (accessToken, userid) {
 exports.createUser = function (accessToken, userInfo) {
     return new Promise(function (resolve, reject) {
         var url = util.format(process.env.API_createUser, accessToken);
-        console.log("CreateUser url=" + url);
+        //console.log("CreateUser url=" + url);
         http.requestHttpsPost(url, userInfo).then(function (data) {
-            //console.log("requestGetdata=" + data);
             var result = JSON.parse(data);
-            //
             if (result.errcode == "0") {
                 console.log(JSON.stringify(result));
+                resolve(result);
             } else {
                 // return error msg
                 console.log("Create user error, errcode=" + result.errcode);
@@ -63,7 +62,7 @@ exports.updateUserStatus = function (userAuth) {
     return new Promise(function (resolve, reject) {
         var url = process.env.API_weChatRestful + "/putUserAuth";
         //console.log("url=" + url);
-        http.requestHttpPut(url, userAuth).then(function (data)
+        http.requestHttpPut(url, userAuth).then(function (result)
         {
             console.log("Update wechat_user_auth status result=" + result);
             resolve(result);

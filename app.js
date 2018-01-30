@@ -109,13 +109,14 @@ var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function ()
                     {
                         token.getAccessToken("directory", process.env.directorySecret).then(function (data)
                         {
-                            user.createUser(data, user_info).then(function (data)
+                            user.createUser(data, user_info).then(function (result)
                             {
-                                var userAuth = JSON.parse(JSON.stringify('{"user_id": "' + user_id + '", "status": "ES"}'));
-                                user.updateUserStatus(userAuth).then(function (data)
-                                {
-                                    console.log("Create user success:" + user_id);
-                                });
+                                if (result.errcode == "0") {
+                                    var userAuth = JSON.parse(JSON.stringify('{"user_id": "' + user_id + '", "status": "ES"}'));
+                                    user.updateUserStatus(userAuth).then(function (data) {
+                                        console.log("Create user success:" + user_id);
+                                    });
+                                }
                             });
                         });
                     }
