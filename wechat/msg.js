@@ -76,7 +76,7 @@ exports.getMsg = function (access_token, msg_data) {
 */
 exports.postMsg = function (access_token, msg_data) {
     return new Promise(function (resolve, reject) {
-        var url = util.format(process.env.API_postMessage, accessToken);
+        var url = util.format(process.env.API_postMessage, access_token);
         //console.log("url=" + url);
         http.requestHttpsPost(url, msg_data).then(function (data) {
             //console.log("requestGetdata=" + data);
