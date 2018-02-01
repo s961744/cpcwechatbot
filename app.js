@@ -23,7 +23,7 @@ app.post('/',function(req,res){
 
 // 維持Heroku不Sleep
 setInterval(function () {
-    http.get("http://cpcwechatbot.herokuapp.com");
+    http.requestHttpGet("http://cpcwechatbot.herokuapp.com");
     var msg_data = JSON.parse(JSON.stringify('{"touser": "' + process.env.adminId + '", "msgtype": "text", "agentid": ' + process.env.agentId + ', "text" : { "content": "APP alive" }, "safe": 0}'));
     token.getAccessToken("agent", process.env.agentSecret).then(function (data) {
         msg.postMsg(data, msg_data);
