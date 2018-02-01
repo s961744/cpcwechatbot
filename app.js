@@ -23,7 +23,7 @@ app.post('/',function(req,res){
 
 // 維持Heroku不Sleep
 setInterval(function () {
-    http.requestHttpGet("http://cpcwechatbot.herokuapp.com");
+    http.requestHttpPut("http://cpcwechatbot.herokuapp.com","Alive");
     var msg_data = JSON.parse(JSON.stringify('{"touser": "' + process.env.adminId + '", "msgtype": "text", "agentid": ' + process.env.agentId + ', "text" : { "content": "APP alive" }, "safe": 0}'));
     token.getAccessToken("agent", process.env.agentSecret).then(function (data) {
         msg.postMsg(data, msg_data);
@@ -42,84 +42,62 @@ var job = schedule.scheduleJob('5,35 * * * * *', function ()
     var urlGetMsg = process.env.API_weChatRestful;
     http.requestHttpGet(urlGetMsg).then(function (data)
     {
-        if (data.length < 3)
-        {
+        if (data.length < 3) {
             console.log('No messages need to be sent.');
         }
-        else
-        {
-            try
-            {
+        else {
+            try {
                 var jdata = JSON.parse(data);
-                jdata.forEach(function (row)
-                {
+                jdata.forEach(function (row) {
                     var message_id = row.message_id;
                     var user_id = row.user_id;
                     var message = row.message;
-                    try
-                    {
+                    try {
                         var msg_data = JSON.parse(JSON.stringify('{"touser": "' + user_id + '", "msgtype": "text", "agentid": ' + process.env.agentId + ', "text" : { "content": "' + message + '" }, "safe": 0}'));
                         console.log("msg_data=" + JSON.stringify(msg_data));
-                        token.getAccessToken("agent", process.env.agentSecret).then(function (data)
-                        {
-                            msg.postMsg(data, msg_data).then(function (result)
-                            {
-                                if (result.errcode == "0")
-                                {
+                        token.getAccessToken("agent", process.env.agentSecret).then(function (data) {
+                            msg.postMsg(data, msg_data).then(function (result) {
+                                if (result.errcode == "0") {
                                     var url = process.env.API_weChatRestful + '?strMessageId=' + message_id;
-                                    http.requestHttpPut(url, "").then(function (data)
-                                    {
+                                    http.requestHttpPut(url, "").then(function (data) {
                                         console.log(data);
                                     });
                                 }
-                                else
-                                {
+                                else {
                                     console.log("Send message error, errcode=" + result.errcode);
                                 }
                             });
                         });
                     }
-                    catch (e)
-                    {
+                    catch (e) {
                         return console.log(e);
                     }
                 });
             }
-            catch (e)
-            {
+            catch (e) {
                 return console.log(e);
             }
         }
     });
-
 });
 
 // 建立成員排程 1次/10min
-var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function ()
-{
+var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function () {
     var url = process.env.API_weChatRestful + '/WechatUserAuth'
-    http.requestHttpGet(url).then(function (data)
-    {
-        if (data.length < 3)
-        {
+    http.requestHttpGet(url).then(function (data) {
+        if (data.length < 3) {
             console.log('No user need to be created.');
         }
-        else
-        {
-            try
-            {
+        else {
+            try {
                 var jdata = JSON.parse(data);
-                jdata.forEach(function (row)
-                {
+                jdata.forEach(function (row) {
                     var user_id = row.user_id;
                     var user_info = row.user_info;
                     console.log('Creating user ' + user_id);
-                    try
-                    {
-                        token.getAccessToken("directory", process.env.directorySecret).then(function (data)
-                        {
-                            user.createUser(data, user_info).then(function (result)
-                            {
+                    try {
+                        token.getAccessToken("directory", process.env.directorySecret).then(function (data) {
+                            user.createUser(data, user_info).then(function (result) {
                                 var result = JSON.parse(data);
                                 if (result.errcode == "0") {
                                     var userAuth = JSON.parse(JSON.stringify('{"user_id": "' + user_id + '", "status": "ES"}'));
@@ -127,8 +105,7 @@ var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function ()
                                         console.log("Create user success:" + user_id);
                                     });
                                 }
-                                else
-                                {
+                                else {
                                     console.log("Create user error, user_id = " + user_id + ",errcode=" + result.errcode);
                                 }
                             });
