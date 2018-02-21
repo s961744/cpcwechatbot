@@ -16,7 +16,7 @@ const
     CryptoGraphy = require('./cryptoGraphy'); // 微信消息加解密模組
 
 /**
- * 构建 WeChat 对象 即 js中 函数就是对象
+ * 建構子
  */
 var WeChat = function(){
     //token
@@ -102,7 +102,6 @@ WeChat.prototype.handleMsg = function (req, res) {
                             //返回给微信伺服器
                             //res.send(reportMsg);
                             break;
-                        
                     }
                 }
                 //文字
@@ -162,7 +161,6 @@ WeChat.prototype.handleMsg = function (req, res) {
                     });
                 }
             } else {
-                //打印错误
                 console.log(err);
             }
         });

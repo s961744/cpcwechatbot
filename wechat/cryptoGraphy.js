@@ -6,22 +6,21 @@ const
     buildXML = new xmlParser.Builder({rootName:'xml',cdata:true,headless:true,renderOpts :{indent:' ',pretty:'true'}}); //用于构建 xml 结构
 
 /**
- * 构建 微信消息加解密对象
- * @param {JSON} config 微信配置文件 
+ * 建構子
  * @param {Request} req  Request 对象
  */
 var CryptoGraphy = function(req){
-    //设置加解密算法
+    //加解密算法
     this.aesModel = 'aes-256-cbc';
-    //设置 CryptoGraphy 对象属性 encodingAESKey
+    //設置 CryptoGraphy 对象属性 encodingAESKey
     this.encodingAESKey = new Buffer(process.env.encodingAESKey + '=', 'base64');
-    //设置 CryptoGraphy 对象属性 iv
+    //設置 CryptoGraphy 对象属性 iv
     this.iv = this.encodingAESKey.slice(0,16);
-    //设置 CryptoGraphy 对象属性 msgSignature
+    //設置 CryptoGraphy 对象属性 msgSignature
     this.msgSignature = req.query.msg_signature;
-    //设置 CryptoGraphy 对象属性 timestamp
+    //設置 CryptoGraphy 对象属性 timestamp
     this.timestamp = req.query.timestamp;
-    //设置 CryptoGraphy 对象属性 nonce
+    //設置 CryptoGraphy 对象属性 nonce
     this.nonce = req.query.nonce;
     //token
     this.token = process.env.token;
@@ -74,7 +73,7 @@ CryptoGraphy.prototype.decryptMsg = function (encryptMsg){
     }
      //实例 AES 解密对象
     var deCipheriv = crypto.createDecipheriv(this.aesModel,this.encodingAESKey,this.iv);
-    //设置自定填充数据为 false
+    //設置自定填充数据为 false
     deCipheriv.setAutoPadding(false);
     //对密文解密对密文解密 并去除前 16 个随机字符串
     var deEncryptedMsg = Buffer.concat([deCipheriv.update(encryptMsg,'base64'),deCipheriv.final()]).toString('utf8');
@@ -103,7 +102,7 @@ CryptoGraphy.prototype.encryptMsg = function(xmlMsg){
     var content = random + buf.toString('binary') + text.toString('binary') + this.corpId + pack;
     //实例 AES 加密对象
     var cipheriv = crypto.createCipheriv(this.aesModel,this.encodingAESKey,this.iv);
-    //设置自定填充数据为 false
+    //設置自定填充数据为 false
     cipheriv.setAutoPadding(false);
     //对明文加密
     var encryptedMsg = Buffer.concat([cipheriv.update(content,'binary'),cipheriv.final()]).toString('base64');
