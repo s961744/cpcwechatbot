@@ -11,12 +11,12 @@ var app = express();
 
 var wechatApp = new wechat();
 
-//用于处理所有进入 3000 端口 get 的连接请求
+// 處理所有GET的連線請求
 app.get('/',function(req,res){
     wechatApp.auth(req,res);
 });
 
-//用于处理所有进入 3000 端口 post 的连接请求
+// 處理所有POST的連線請求
 app.post('/',function(req,res){
     wechatApp.handleMsg(req,res);
 });
@@ -53,7 +53,8 @@ var job = schedule.scheduleJob('5,35 * * * * *', function ()
                     var user_id = row.user_id;
                     var message = row.message;
                     try {
-                        var msg_data = JSON.parse(JSON.stringify('{"touser": "' + user_id + '", "msgtype": "text", "agentid": ' + process.env.agentId + ', "text" : { "content": "' + message + '" }, "safe": 0}'));
+                        var messageSend = JSON.parse(jsonEscape(message));
+                        var msg_data = JSON.parse(JSON.stringify('{"touser": "' + user_id + '", "msgtype": "text", "agentid": ' + process.env.agentId + ', "text" : { "content": "' + messageSend + '" }, "safe": 0}'));
                         console.log("msg_data=" + JSON.stringify(msg_data));
                         token.getAccessToken("agent", process.env.agentSecret).then(function (data) {
                             msg.postMsg(data, msg_data).then(function (result) {
@@ -123,3 +124,6 @@ var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function () {
     });
 });
 
+function jsonEscape(str) {
+    return str.replace(/\n/g, "\\n").replace(/~n/g, "\\n");
+}
