@@ -37,7 +37,7 @@ var server = app.listen(process.env.PORT || 443, function () {
 });
 
 // 發訊息排程 1次/30sec (每分鐘的5秒及35秒)
-var job = schedule.scheduleJob('5,35 * * * * *', function ()
+var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
 {
     var urlGetMsg = process.env.API_weChatRestful;
     http.requestHttpGet(urlGetMsg).then(function (data)
