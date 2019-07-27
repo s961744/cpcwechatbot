@@ -37,7 +37,7 @@ var server = app.listen(process.env.PORT || 443, function () {
 });
 
 // 發訊息排程 1次/30sec (每分鐘的5秒及35秒)
-var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
+var job = schedule.scheduleJob('5,35 * * * * *', function ()
 {
     var urlGetMsg = process.env.API_weChatRestful;
     http.requestHttpGet(urlGetMsg).then(function (data)
@@ -53,7 +53,7 @@ var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
                     var user_id = row.user_id;
                     var message = row.message;
                     try {
-                        var messageSend = JSON.parse(jsonEscape(message));
+                        var messageSend = jsonEscape(message);
                         var msg_data = JSON.parse(JSON.stringify('{"touser": "' + user_id + '", "msgtype": "text", "agentid": ' + process.env.agentId + ', "text" : { "content": "' + messageSend + '" }, "safe": 0}'));
                         console.log("msg_data=" + JSON.stringify(msg_data));
                         token.getAccessToken("agent", process.env.agentSecret).then(function (data) {
