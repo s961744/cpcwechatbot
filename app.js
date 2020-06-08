@@ -11,6 +11,11 @@ var app = express();
 
 var wechatApp = new wechat();
 
+// 提供呼叫以維持Heroku不休眠
+app.get('/stayAwake',function(req,res){
+    
+});
+
 // 處理所有GET的連線請求
 app.get('/',function(req,res){
     wechatApp.auth(req,res);
@@ -36,8 +41,8 @@ var server = app.listen(process.env.PORT || 443, function () {
     console.log("App now running on port", port);
 });
 
-// 發訊息排程 1次/30sec (每分鐘的5秒及35秒)
-var job = schedule.scheduleJob('5,35 * * * * *', function ()
+// 發訊息排程 1次/10sec
+var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
 {
     var urlGetMsg = process.env.API_weChatRestful;
     http.requestHttpGet(urlGetMsg).then(function (data)
