@@ -13,7 +13,7 @@ var wechatApp = new wechat();
 
 // 提供呼叫以維持Heroku不休眠
 app.get('/stayAwake',function(req,res){
-    
+    res.send('WeChat Bot stay awake');
 });
 
 // 處理所有GET的連線請求
