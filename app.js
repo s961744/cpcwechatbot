@@ -40,7 +40,7 @@ var server = app.listen(process.env.PORT || 443, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
 });
-d
+
 // 發訊息排程 1次/10sec
 /*
 var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
