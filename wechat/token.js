@@ -30,7 +30,7 @@ exports.getAccessToken = function (secretType, secret){
                             accessTokenJson.directory.expires_time = new Date().getTime() + (parseInt(result.expires_in) - 200) * 1000;
                             // 更新 accessToken.json
                             console.log(JSON.stringify(accessTokenJson));
-                            fs.writeFile('./wechat/access_token.json', JSON.stringify(accessTokenJson));
+                            fs.writeFile('./wechat/access_token.json', JSON.stringify(accessTokenJson), (err) => err && console.error(err));
                             console.log("update " + secretType + " accessToken:" + JSON.stringify(accessTokenJson.directory));
                             // return access_token 
                             resolve(accessTokenJson.directory.access_token);
