@@ -40,9 +40,10 @@ var server = app.listen(process.env.PORT || 443, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
 });
-
+d
 // 發訊息排程 1次/10sec
-/*var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
+/*
+var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
 {
     var urlGetMsg = process.env.API_weChatRestful;
     http.requestHttpGet(urlGetMsg).then(function (data)
@@ -87,7 +88,8 @@ var server = app.listen(process.env.PORT || 443, function () {
     });
 });
 */
-// 建立成員排程  1次/10min
+
+// 建立成員排程 1次/10min
 var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function () {
     var url = process.env.API_weChatRestful + '/WechatUserAuth'
     http.requestHttpGet(url).then(function (data) {
