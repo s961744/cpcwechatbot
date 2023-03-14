@@ -42,7 +42,7 @@ var server = app.listen(process.env.PORT || 443, function () {
 });
 
 // 發訊息排程 1次/10sec
-var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
+/*var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
 {
     var urlGetMsg = process.env.API_weChatRestful;
     http.requestHttpGet(urlGetMsg).then(function (data)
@@ -86,7 +86,7 @@ var job = schedule.scheduleJob('5,15,25,35,45,55 * * * * *', function ()
         }
     });
 });
-
+*/
 // 建立成員排程 1次/10min
 var job = schedule.scheduleJob('0 0,10,20,30,40,50 * * * *', function () {
     var url = process.env.API_weChatRestful + '/WechatUserAuth'
